@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Loader from "@/components/shared/Loader";
 
 import { SignupValidation } from "@/lib/validation";
+import { createUserAccount } from "@/lib/appwrite/api";
 
 const SignupForm = () => {
   const isLoading = false;
@@ -23,6 +24,12 @@ const SignupForm = () => {
     },
   });
 
+  async function onSubmit(values: z.infer<typeof SignupValidation>) {
+    const newUser = await createUserAccount(values);
+
+    console.log(newUser)
+  }
+
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
@@ -35,8 +42,7 @@ const SignupForm = () => {
           To use snapgram, Please enter your details
         </p>
 
-        <form
-          className="flex flex-col gap-5 w-full mt-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full mt-4">
           <FormField
             control={form.control}
             name="name"
